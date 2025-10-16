@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información de Emergencia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, Arial, sans-serif;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .emergency-header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .emergency-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .emergency-header .subtitle {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .person-info {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .person-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .person-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .person-id {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .info-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+            align-items: start;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #34495e;
+            font-size: 0.95rem;
+        }
+
+        .info-value {
+            color: #2c3e50;
+            font-size: 0.95rem;
+            word-break: break-word;
+        }
+
+        .emergency-contact {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        .emergency-contact h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .contact-detail {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .contact-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .contact-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .call-button {
+            background: white;
+            color: #e74c3c;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .call-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .medical-notes {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .medical-notes h4 {
+            color: #856404;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .medical-notes p {
+            color: #856404;
+            line-height: 1.5;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #e74c3c;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .info-row {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+            
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="emergency-header">
+            <h1>🆘 INFORMACIÓN DE EMERGENCIA</h1>
+            <p class="subtitle">Solo lectura • Generado por el titular</p>
+        </div>
+        
+        <div class="content">
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Cargando información de emergencia...</p>
+            </div>
+            
+            <div id="error" class="error" style="display: none;">
+                <h3>❌ Error</h3>
+                <p id="errorMessage">No se pudo cargar la información de emergencia.</p>
+            </div>
+            
+            <div id="emergencyData" style="display: none;">
+                <div class="person-info">
+                    <img id="personPhoto" class="person-photo" src="" alt="Foto personal" style="display: none;">
+                    <div class="person-name" id="personName"></div>
+                    <div class="person-id">ID: <span id="personId"></span></div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-section">
+                        <div class="section-title">
+                            👤 Información Personal
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Edad:</div>
+                            <div class="info-value" id="edad"></div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Sexo:</div>
+                            <div class="info-value" id="sexo"></div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Grupo Sanguíneo:</div>
+                            <div class="info-value" id="grupoSanguineo" style="font-weight: bold; color: #e74c3c;"></div>
+                        </div>
+                        <div class="info-row" id="pesoRow" style="display: none;">
+                            <div class="info-label">Peso:</div>
+                            <div class="info-value" id="peso"></div>
+                        </div>
+                        <div class="info-row" id="alturaRow" style="display: none;">
+                            <div class="info-label">Altura:</div>
+                            <div class="info-value" id="altura"></div>
+                        </div>
+                        <div class="info-row" id="residenciaRow" style="display: none;">
+                            <div class="info-label">Residencia:</div>
+                            <div class="info-value" id="residencia"></div>
+                        </div>
+                    </div>
+
+                    <div class="emergency-contact">
+                        <h3>📞 CONTACTO DE EMERGENCIA</h3>
+                        <div class="contact-info">
+                            <div class="contact-detail">
+                                <div class="contact-label">Nombre</div>
+                                <div class="contact-value" id="contactoNombre"></div>
+                            </div>
+                            <div class="contact-detail">
+                                <div class="contact-label">Teléfono</div>
+                                <div class="contact-value" id="contactoTelefono"></div>
+                            </div>
+                        </div>
+                        <button class="call-button" id="callButton" onclick="makeCall()">
+                            📱 Llamar Ahora
+                        </button>
+                    </div>
+
+                    <div id="medicalNotesSection" class="medical-notes" style="display: none;">
+                        <h4>⚕️ Notas Médicas</h4>
+                        <p id="notas"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Esta página es solo de lectura y no puede ser modificada</p>
+            <p>En caso de emergencia, contacte inmediatamente a los servicios de emergencia locales</p>
+            <p><small>Generado: <span id="timestamp"></span></small></p>
+        </div>
+    </div>
+
+    <script>
+        async function loadEmergencyData() {
+            try {
+                // Get ID from URL parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                const emergencyId = urlParams.get('id');
+                
+                if (!emergencyId) {
+                    throw new Error('ID de emergencia no encontrado en la URL');
+                }
+
+                // Fetch data from Netlify Function
+                const response = await fetch(`/.netlify/functions/get-emergency-data?id=${emergencyId}`);
+                
+                if (!response.ok) {
+                    throw new Error('Información de emergencia no encontrada');
+                }
+
+                const data = await response.json();
+                displayEmergencyData(data);
+                
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        function displayEmergencyData(data) {
+            // Hide loading, show data
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('emergencyData').style.display = 'block';
+            
+            // Fill in the data
+            document.getElementById('personName').textContent = data.nombre;
+            document.getElementById('personId').textContent = data.cedula;
+            document.getElementById('edad').textContent = data.edad + ' años';
+            document.getElementById('sexo').textContent = data.sexo;
+            document.getElementById('grupoSanguineo').textContent = data.grupoSanguineo;
+            
+            // Optional fields
+            if (data.peso) {
+                document.getElementById('peso').textContent = data.peso + ' kg';
+                document.getElementById('pesoRow').style.display = 'grid';
+            }
+            
+            if (data.altura) {
+                document.getElementById('altura').textContent = data.altura + ' cm';
+                document.getElementById('alturaRow').style.display = 'grid';
+            }
+            
+            if (data.residencia) {
+                document.getElementById('residencia').textContent = data.residencia;
+                document.getElementById('residenciaRow').style.display = 'grid';
+            }
+            
+            // Photo
+            if (data.foto) {
+                const photoImg = document.getElementById('personPhoto');
+                photoImg.src = data.foto;
+                photoImg.style.display = 'block';
+            }
+            
+            // Emergency contact
+            document.getElementById('contactoNombre').textContent = data.contactoNombre;
+            document.getElementById('contactoTelefono').textContent = data.contactoTelefono;
+            
+            // Medical notes
+            if (data.notas) {
+                document.getElementById('notas').textContent = data.notas;
+                document.getElementById('medicalNotesSection').style.display = 'block';
+            }
+            
+            // Timestamp
+            if (data.timestamp) {
+                const date = new Date(data.timestamp);
+                document.getElementById('timestamp').textContent = date.toLocaleString('es-ES');
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        function makeCall() {
+            const phoneNumber = document.getElementById('contactoTelefono').textContent;
+            if (phoneNumber) {
+                window.location.href = `tel:${phoneNumber}`;
+            }
+        }
+
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', loadEmergencyData);
+    </script>
+</body>
+</html>
